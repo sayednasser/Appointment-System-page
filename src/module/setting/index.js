@@ -1,0 +1,1 @@
+export {default as SettingRouter} from "./setting.controller.js";
