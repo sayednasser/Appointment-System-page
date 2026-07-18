@@ -79,8 +79,11 @@ export const createAppointment = async (inputs) => {
 
   const appointment = await AppointmentModel.create(inputs);
 
-  // fire-and-forget, never blocks the response
-  telegramService.notifyNewAppointment(appointment);
+  try {
+    await telegramService.notifyNewAppointment(appointment);
+  } catch (err) {
+    console.error("Telegram Error:", err);
+  }
 
   return appointment;
 };

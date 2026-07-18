@@ -57,8 +57,8 @@ const sendTelegramMessage = async (text) => {
 
 export const telegramService = {
 
-  notifyNewAppointment: (appointment) =>
-    sendTelegramMessage(
+  notifyNewAppointment: async (appointment) =>
+   await  sendTelegramMessage(
 `📅 <b>حجز موعد جديد</b>
 
 👤 الاسم: ${appointment.patientName}
