@@ -31,8 +31,7 @@ export const createReview = async (inputs, file) => {
     image,
   });
 
-  // fire-and-forget, never blocks the response
-  telegramService.notifyNewReview(review);
+
 
   return review;
 };

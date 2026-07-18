@@ -9,5 +9,5 @@ config.env.*
 config.env.development
 config.env.production
 src/seed/
-*.seed.js
+*.seed.js 
 *.seed.ts
