@@ -32,6 +32,7 @@ export const createAppointment = async (inputs) => {
   }
 
   const dayName = getDayName(appointmentDate);
+  
 
   const daySchedule = doctor.workingHours.find(
     (wh) => wh.day === dayName && wh.isActive
