@@ -49,8 +49,6 @@ export const createOffer = async (inputs, file) => {
 
   const offer = await OfferModel.create({ ...inputs, image });
 
-  // fire-and-forget, never blocks the response
-  telegramService.notifyOfferPublished(offer);
 
   return offer;
 };
@@ -91,10 +89,7 @@ export const updateOffer = async (id, inputs, file) => {
 
   await offer.save();
 
-  // If this update just activated the offer, notify Telegram too.
-  if (!wasActive && offer.isActive) {
-    telegramService.notifyOfferPublished(offer);
-  }
+
 
   return offer;
 };

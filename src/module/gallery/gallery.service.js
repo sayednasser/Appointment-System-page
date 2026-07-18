@@ -12,7 +12,7 @@ export const getGalleryItems = async () => {
 
 // ================================
 // ➕ CREATE GALLERY ITEM
-// ================================
+// ================================ 
 export const createGalleryItem = async (inputs, files) => {
   let beforeImage = { secure_url: "", public_id: "" };
   let afterImage = { secure_url: "", public_id: "" };
