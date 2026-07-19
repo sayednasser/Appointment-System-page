@@ -83,7 +83,7 @@ export const bootstrap = async () => {
     };
 
     // Rate Limiter
-    const limiter = rateLimit({ 
+    const limiter = rateLimit({
         windowMs: 5 * 60 * 1000,
         max: 1000,
         message: "Too many requests from this IP, please try again after 5 minutes",
@@ -105,15 +105,13 @@ export const bootstrap = async () => {
     app.use("/offer", OfferRouter);
     app.use("/review", ReviewRouter);
     app.use("/appointment", AppointmentRouter);
-   
+
     app.get("/", (req, res) => {
         res.status(200).json("Hello world");
     });
-
-    app.all("*", (req, res) => {
+    app.all("(.*)", (req, res) => {
         res.status(404).json("Route not found");
     });
-    
     app.use(GlobalErrorHandler);
 
     return app;
