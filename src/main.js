@@ -1,4 +1,6 @@
+// main.js
 import { bootstrap } from "./app.bootstrap.js";
 
-                 
- bootstrap();
+bootstrap();
+
+export default {}; // ✅ أضف السطر ده
