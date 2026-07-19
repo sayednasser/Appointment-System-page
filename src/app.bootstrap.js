@@ -1,5 +1,65 @@
+// import express from "express";
+// import { PORT } from "../config/config.js";
+// import { GlobalErrorHandler } from "./middleware/index.js";
+// import { connectDB } from "./DB/Connection.DB.js";
+// import { connectRedis } from "./DB/Connection.redis.js";
+// import rateLimit from "express-rate-limit";
+// import helmet from "helmet";
+// import cors from "cors";
+// import { SettingRouter, DoctorRouter, ServiceRouter, GalleryRouter, OfferRouter, ReviewRouter, AppointmentRouter } from "./module/index.js";
+
+
+// const app = express();
+
+
+// export const bootstrap = async () => {
+//     await connectDB();
+//     await connectRedis();
+//     // CORS Options
+//     const corsOptions = {
+//         origin: process.env.ORIGIN
+//             ? process.env.ORIGIN.split(",")
+//             : "*",
+//         optionsSuccessStatus: 200,
+//         credentials: true
+//     };
+//     // Rate Limiter
+//     const limiter = rateLimit({ 
+//         windowMs: 5 * 60 * 1000,
+//         max: 1000,
+//         message:
+//             "Too many requests from this IP, please try again after 5 minutes",
+//         legacyHeaders: true,
+//         standardHeaders: "draft-8",
+//     });
+//     app.set("trust proxy", 1);
+//     app.use(cors(corsOptions));
+//     app.use(helmet());
+//     app.use(limiter);
+//     app.use(express.json());
+//     app.use("/setting", SettingRouter);
+//     app.use("/doctor", DoctorRouter);
+//     app.use("/service", ServiceRouter);
+//     app.use("/gallery", GalleryRouter);
+//     app.use("/offer", OfferRouter);
+//     app.use("/review", ReviewRouter);
+//     app.use("/appointment", AppointmentRouter);
+//     app.get("/", (req, res) => {
+//         res.status(200).json("Hello world");
+//     })
+//        app.all("{/*dummy}", (req, res) => {
+//         res.status(404).json("Route not found");
+//     })
+//     app.use((GlobalErrorHandler))
+
+//     app.listen(PORT, "0.0.0.0", () => {
+//         console.log(
+//             `✔😎 Server is perfectly running on port ${PORT}`
+//         );
+//     });
+// } 
+
 import express from "express";
-import { PORT } from "../config/config.js";
 import { GlobalErrorHandler } from "./middleware/index.js";
 import { connectDB } from "./DB/Connection.DB.js";
 import { connectRedis } from "./DB/Connection.redis.js";
@@ -8,23 +68,16 @@ import helmet from "helmet";
 import cors from "cors";
 import { SettingRouter, DoctorRouter, ServiceRouter, GalleryRouter, OfferRouter, ReviewRouter, AppointmentRouter } from "./module/index.js";
 
-
 const app = express();
 
-
 export const bootstrap = async () => {
-
-
-
+    // الاتصال بقواعد البيانات
     await connectDB();
     await connectRedis();
 
-
     // CORS Options
     const corsOptions = {
-        origin: process.env.ORIGIN
-            ? process.env.ORIGIN.split(",")
-            : "*",
+        origin: process.env.ORIGIN ? process.env.ORIGIN.split(",") : "*",
         optionsSuccessStatus: 200,
         credentials: true
     };
@@ -33,19 +86,18 @@ export const bootstrap = async () => {
     const limiter = rateLimit({ 
         windowMs: 5 * 60 * 1000,
         max: 1000,
-        message:
-            "Too many requests from this IP, please try again after 5 minutes",
+        message: "Too many requests from this IP, please try again after 5 minutes",
         legacyHeaders: true,
         standardHeaders: "draft-8",
     });
 
     app.set("trust proxy", 1);
-
     app.use(cors(corsOptions));
     app.use(helmet());
     app.use(limiter);
     app.use(express.json());
 
+    // Routes
     app.use("/setting", SettingRouter);
     app.use("/doctor", DoctorRouter);
     app.use("/service", ServiceRouter);
@@ -56,18 +108,19 @@ export const bootstrap = async () => {
    
     app.get("/", (req, res) => {
         res.status(200).json("Hello world");
-    })
-
-   
-
-    app.all("{/*dummy}", (req, res) => {
-        res.status(404).json("Route not found");
-    })
-    app.use((GlobalErrorHandler))
-
-    app.listen(PORT, "0.0.0.0", () => {
-        console.log(
-            `✔😎 Server is perfectly running on port ${PORT}`
-        );
     });
-} 
+
+    app.all("*", (req, res) => {
+        res.status(404).json("Route not found");
+    });
+    
+    app.use(GlobalErrorHandler);
+
+    return app;
+};
+
+// التصدير المطلوب لـ Vercel
+export default async (req, res) => {
+    const appInstance = await bootstrap();
+    appInstance(req, res);
+};
