@@ -44,9 +44,11 @@ export const bootstrap = async () => {
     app.use("/offer", OfferRouter);
     app.use("/review", ReviewRouter);
     app.use("/appointment", AppointmentRouter);
+   
     app.get("/", (req, res) => {
         res.status(200).json("Hello world");
     })
+
        app.all("{/*dummy}", (req, res) => {
         res.status(404).json("Route not found");
     })
