@@ -62,3 +62,17 @@ export const updateSettings = async (inputs, file) => {
 
   return settings;
 };
+
+
+// ================================
+// 🔐 CHECK ADMIN ACCESS CODE
+// ================================
+export const checkAdminAccess = async (code) => {
+  let settings = await SettingsModel.findOne();
+
+  if (!settings) {
+    settings = await createDefaultSettings();
+  }
+
+  return settings.adminAccessCode === code;
+};

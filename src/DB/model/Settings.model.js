@@ -94,7 +94,7 @@ const settingsSchema = new mongoose.Schema(
       default: "",
     },
 
-   
+
 
     address: {
       type: String,
@@ -116,6 +116,11 @@ const settingsSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
+    },
+    adminAccessCode: {
+      type: String,
+      trim: true,
+      default: "AhmedSayed2026",
     },
   },
   {

@@ -48,5 +48,20 @@ router.patch(
     }
 );
 
+router.post(
+  "/admin-access",
+  validation(validators.adminAccess),
+  async (req, res) => {
+    const success = await settingService.checkAdminAccess(req.body.code);
+
+    return successResponse({
+      res,
+      data: {
+        success,
+      },
+    });
+  }
+);  
+
 export default router;
 

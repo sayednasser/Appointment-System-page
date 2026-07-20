@@ -37,3 +37,8 @@ export const updateSettings = {
     })
    
 };
+export const adminAccess = {
+  body: joi.object({
+    code: joi.string().required(),
+  }),
+}
